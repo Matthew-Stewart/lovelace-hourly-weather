@@ -357,14 +357,15 @@ export class HourlyWeatherCard extends LitElement {
     const precipitation: SegmentPrecipitation[] = [];
     for (let i = offset; i < numSegments + offset; i++) {
       const fs = forecast[i];
+      const fs2 = forecast[i+1];
       let amount = '';
-      if (fs.precipitation > 0) {
-        amount = `${formatNumber(fs.precipitation, this.hass.locale)} ${unit}`.trim();
+      if (fs.precipitation > 0 || fs2.precipitation > 0) {
+        amount = `${formatNumber(fs.precipitation+fs2.precipitation, this.hass.locale)} ${unit}`.trim();
       }
       let probability = '';
       let probabilityText = '';
-      if (fs.precipitation_probability > 0) {
-        probability = `${formatNumber(fs.precipitation_probability, this.hass.locale)}%`.trim();
+      if (fs.precipitation_probability > 0 || fs2.precipitation_probability > 0) {
+        probability = `${formatNumber((fs.precipitation_probability+fs.precipitation_probability)/2, this.hass.locale)}%`.trim();
         probabilityText = this.localize('card.chance_of_precipitation', '{0}', String(fs.precipitation_probability));
       }
       precipitation.push({
